@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 the original author or authors.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,44 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.data.jpa.example.repository.simple;
+package org.springframework.data.jpa.example.repository.custom;
 
 import static org.junit.Assert.*;
 
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.data.jpa.example.domain.User;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Intergration test showing the basic usage of {@link SimpleUserRepository}.
+ * Intergration test showing the basic usage of {@link UserRepository}.
  * 
  * @author Oliver Gierke
  * @author Thomas Darimont
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-@ContextConfiguration(classes = SimpleConfiguration.class)
-public class SimpleUserRepositoryTests {
+// @ActiveProfiles("jdbc") // Uncomment @ActiveProfiles to enable the JDBC Implementation of the custom repository
+public abstract class AbstractUserRepositoryCustomizationTests {
 
-	@Autowired SimpleUserRepository repository;
-	User user;
+	@Autowired UserRepository repository;
 
-	@Before
-	public void setUp() {
-		user = new User();
-		user.setUsername("foobar");
-		user.setFirstname("firstname");
-		user.setLastname("lastname");
-	}
-
+	/**
+	 * Tests inserting a user and asserts it can be loaded again.
+	 */
 	@Test
-	public void findSavedUserById() {
+	public void testInsert() {
+
+		User user = new User();
+		user.setUsername("username");
 
 		user = repository.save(user);
 
@@ -58,7 +54,11 @@ public class SimpleUserRepositoryTests {
 	}
 
 	@Test
-	public void findSavedUserByLastname() throws Exception {
+	public void saveAndFindByLastNameAndFindByUserName() {
+
+		User user = new User();
+		user.setUsername("foobar");
+		user.setLastname("lastname");
 
 		user = repository.save(user);
 
@@ -66,15 +66,25 @@ public class SimpleUserRepositoryTests {
 
 		assertNotNull(users);
 		assertTrue(users.contains(user));
+
+		User reference = repository.findByTheUsersName("foobar");
+		assertEquals(user, reference);
 	}
 
+	/**
+	 * Test invocation of custom method.
+	 */
 	@Test
-	public void findByFirstnameOrLastname() throws Exception {
+	public void testCustomMethod() {
+
+		User user = new User();
+		user.setUsername("username");
 
 		user = repository.save(user);
 
-		List<User> users = repository.findByFirstnameOrLastname("lastname");
+		List<User> users = repository.myCustomBatchOperation();
 
+		assertNotNull(users);
 		assertTrue(users.contains(user));
 	}
 }

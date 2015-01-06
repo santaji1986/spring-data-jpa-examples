@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 the original author or authors.
+ * Copyright 2014 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,24 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.data.jpa.example.repository.custom;
+package org.springframework.data.jpa.example.repository.auditing;
 
-import java.util.List;
-
-import org.springframework.data.jpa.example.domain.User;
+import org.springframework.test.context.ContextConfiguration;
 
 /**
- * Interface for repository functionality that ought to be implemented manually.
+ * Test case to show Spring Data JPA auditing with JavaConfig
  * 
  * @author Oliver Gierke
- * @author Thomas Darimont
  */
-interface UserRepositoryCustom {
+@ContextConfiguration(classes = AuditingConfiguration.class)
+public class JavaConfigAuditableUserSample extends AbstractAuditableUserSample {
 
-	/**
-	 * Custom repository operation.
-	 * 
-	 * @return
-	 */
-	List<User> myCustomBatchOperation();
 }

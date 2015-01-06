@@ -13,24 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.data.jpa.example.repository.custom;
+package org.springframework.data.jpa.example.repository.caching;
 
-import java.util.List;
-
-import org.springframework.data.jpa.example.domain.User;
+import org.springframework.test.context.ContextConfiguration;
 
 /**
- * Interface for repository functionality that ought to be implemented manually.
+ * Test cas to bootstratp the test case with Spring Data JPA and Spring Caching enabled through JavaConfig.
  * 
  * @author Oliver Gierke
  * @author Thomas Darimont
  */
-interface UserRepositoryCustom {
+@ContextConfiguration(classes = CachingConfiguration.class)
+public class JavaConfigCachingRepositoryTests extends AbstractCachingRepositoryTests {
 
-	/**
-	 * Custom repository operation.
-	 * 
-	 * @return
-	 */
-	List<User> myCustomBatchOperation();
 }

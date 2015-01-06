@@ -13,41 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.data.jpa.example.repository.custom;
+package org.springframework.data.jpa.example.repository.simple;
 
 import static org.junit.Assert.*;
 
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.data.jpa.example.domain.User;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Intergration test showing the basic usage of {@link UserRepository}.
+ * Intergration test showing the basic usage of {@link SimpleUserRepository}.
  * 
  * @author Oliver Gierke
  * @author Thomas Darimont
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-@ContextConfiguration(classes = CustomRepositoryConfig.class)
-// @ActiveProfiles("jdbc") // Uncomment @ActiveProfiles to enable the JDBC Implementation of the custom repository
-public class UserRepositoryCustomizationTests {
+public abstract class AbstractSimpleUserRepositoryTests {
 
-	@Autowired UserRepository repository;
+	@Autowired SimpleUserRepository repository;
+	User user;
 
-	/**
-	 * Tests inserting a user and asserts it can be loaded again.
-	 */
+	@Before
+	public void setUp() {
+		user = new User();
+		user.setUsername("foobar");
+		user.setFirstname("firstname");
+		user.setLastname("lastname");
+	}
+
 	@Test
-	public void testInsert() {
-
-		User user = new User();
-		user.setUsername("username");
+	public void findSavedUserById() {
 
 		user = repository.save(user);
 
@@ -55,11 +57,7 @@ public class UserRepositoryCustomizationTests {
 	}
 
 	@Test
-	public void saveAndFindByLastNameAndFindByUserName() {
-
-		User user = new User();
-		user.setUsername("foobar");
-		user.setLastname("lastname");
+	public void findSavedUserByLastname() throws Exception {
 
 		user = repository.save(user);
 
@@ -67,25 +65,15 @@ public class UserRepositoryCustomizationTests {
 
 		assertNotNull(users);
 		assertTrue(users.contains(user));
-
-		User reference = repository.findByTheUsersName("foobar");
-		assertEquals(user, reference);
 	}
 
-	/**
-	 * Test invocation of custom method.
-	 */
 	@Test
-	public void testCustomMethod() {
-
-		User user = new User();
-		user.setUsername("username");
+	public void findByFirstnameOrLastname() throws Exception {
 
 		user = repository.save(user);
 
-		List<User> users = repository.myCustomBatchOperation();
+		List<User> users = repository.findByFirstnameOrLastname("lastname");
 
-		assertNotNull(users);
 		assertTrue(users.contains(user));
 	}
 }

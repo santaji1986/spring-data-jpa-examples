@@ -15,22 +15,12 @@
  */
 package org.springframework.data.jpa.example.repository.custom;
 
-import java.util.List;
-
-import org.springframework.data.jpa.example.domain.User;
+import org.springframework.test.context.ContextConfiguration;
 
 /**
- * Interface for repository functionality that ought to be implemented manually.
+ * Test class to run the tests using XML configuration.
  * 
- * @author Oliver Gierke
  * @author Thomas Darimont
  */
-interface UserRepositoryCustom {
-
-	/**
-	 * Custom repository operation.
-	 * 
-	 * @return
-	 */
-	List<User> myCustomBatchOperation();
-}
+@ContextConfiguration(locations = "classpath:custom-repository-context.xml")
+public class XmlConfigUserRepositoryCustomizationTests extends AbstractUserRepositoryCustomizationTests {}

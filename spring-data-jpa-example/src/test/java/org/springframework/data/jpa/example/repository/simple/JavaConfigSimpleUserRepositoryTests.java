@@ -13,24 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.data.jpa.example.repository.custom;
+package org.springframework.data.jpa.example.repository.simple;
 
-import java.util.List;
-
-import org.springframework.data.jpa.example.domain.User;
+import org.springframework.test.context.ContextConfiguration;
 
 /**
- * Interface for repository functionality that ought to be implemented manually.
- * 
- * @author Oliver Gierke
  * @author Thomas Darimont
  */
-interface UserRepositoryCustom {
-
-	/**
-	 * Custom repository operation.
-	 * 
-	 * @return
-	 */
-	List<User> myCustomBatchOperation();
-}
+@ContextConfiguration(classes = SimpleConfiguration.class)
+public class JavaConfigSimpleUserRepositoryTests extends AbstractSimpleUserRepositoryTests {}
